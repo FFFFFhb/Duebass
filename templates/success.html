@@ -1,0 +1,8 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}Success!{% endblock %}
+{% block content %}
+<h1 class="center">修改成功！</h1>
+    <input class="btn btn-green" id="" type="submit" value="返回主页"/>
+    <a href="{% url 'index' %}"></a>
+{% endblock %}

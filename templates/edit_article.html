@@ -1,0 +1,191 @@
+{% extends 'userbase.html' %}
+{% load staticfiles %}
+{% block right_content %}
+
+    <style>
+        .middle_wrap {
+            width: 30%;
+            margin: 0 auto;
+            text-align: center;
+            background: rgba(248, 248, 248, 0.49);
+            padding: 20px;
+        }
+
+        .middle_wrap input[type='text'], .middle_wrap textarea, .middle_wrap h3 {
+            width: 100%;
+        }
+
+        .middle_wrap h3 {
+            text-align: left;
+            margin: 20px 0 5px;
+        }
+
+        .middle_wrap input[type='text'] {
+            height: 22px;
+        }
+
+        .middle_wrap textarea {
+            height: 200px;
+            resize: none;
+            padding-top: 5px;
+            outline: none;
+        }
+
+        .middle_wrap img {
+            margin: 10px -75px 0 0;
+        }
+
+        .img_btn {
+            float: right;
+            margin-top: 57px;
+            border: 1px solid #9f9f9f;
+            border-radius: 3px;
+            cursor: pointer;
+            padding: 5px 20px;
+        }
+
+        .btn_wrap {
+            margin: 10px 0;
+            text-align: right;
+        }
+
+        .btn_wrap .btn_cancel {
+            border: none;
+            background: none;
+            color: rgba(13, 106, 202, 0.95);
+            cursor: pointer;
+            padding: 0 20px;
+        }
+
+        .btn_wrap .btn_finish {
+            border: 1px solid #9f9f9f;
+            border-radius: 3px;
+            padding: 5px 20px;
+            background: none;
+            cursor: pointer;
+        }
+    </style>
+
+
+    <div class="right">
+        <div class="personal_des Releasecont">
+            <div class="head">
+                <h1>我的文章</h1>
+            </div>
+        </div>
+        <div class="personal_des permessage">
+            <div class="companycenter">
+                <div class="group_list brief">
+
+                    <section class="middle_wrap">
+                        <form class="perinform" id="jsEditArticleForm" autocomplete="off" method="post" enctype="multipart/form-data" action="{% url 'yonghu:editarticle' article.id %}">
+                            <div>
+                                <img id="image" src="{{ MEDIA_URL }}{{ article.image }}" width="70px" height="70px"/>
+                                <label class="img_btn">
+                                    <input type="file" id="img_file" name="image" accept=".jpg,.png" hidden/>修改封面</label>
+                            </div>
+                            <h3>题目</h3>
+                            <input type="text" id="edittitle" name="title" value="{{ article.title }}"/>
+                            <h3>文章描述</h3>
+                            <input type="text"  id="editdesc" name="desc" value="{{ article.desc }}"/>
+                            <h3>正文</h3>
+                            <textarea id="editdetail" name="detail">
+                                 {{ article.detail }}
+                             </textarea>
+                            <h4 name="id" hidden>{{ article.id }}</h4>
+                            <div class="btn_wrap">
+                                <button class="btn_cancel"><a href="{% url 'yonghu:myarticle' %}">取消</a></button>
+                                <button class="btn_finish" id="jsEditArticleBtn" type="submit"> 修改</button>
+                            </div>
+                            {% csrf_token %}
+                        </form>
+                    </section>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'yonghu:yonghu_info' %}">个人中心</a>></li>
+                <li>我的文章</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+{% block custom_js %}
+    <script>
+        $('#img_file').change(function () {
+            loadImg();
+        })
+
+        function loadImg() {
+            var file = $(".img_btn").find("input")[0].files[0];
+            console.log(file)
+            var reader = new FileReader();
+            var imgFile;
+            reader.onload = function (e) {
+                imgFile = e.target.result;
+                console.log(imgFile);
+                $("#image").attr('src', imgFile);
+            };
+            reader.readAsDataURL(file);
+        }
+
+
+{# //保存个人资料#}
+{#    $('#jsEditArticleBtn').on('click', function(){#}
+{#        var _self = $(this),#}
+{#            $jsEditUserForm = $('#jsEditArticleForm')#}
+{#            verify = verifySubmit(#}
+{#            [#}
+{#                {id: '#nick_name', tips: Dml.Msg.epNickName, require: true}#}
+{#            ]#}
+{#        );#}
+{#        if(!verify){#}
+{#           return;#}
+{#        }#}
+{#        $.ajax({#}
+{#            cache: false,#}
+{#            type: 'post',#}
+{#            dataType:'json',#}
+{#            url:"/yonghu/info/",#}
+{#            data:$jsEditUserForm.serialize(),#}
+{#            async: true,#}
+{#            beforeSend:function(XMLHttpRequest){#}
+{#                _self.val("保存中...");#}
+{#                _self.attr('disabled',true);#}
+{#            },#}
+{#            success: function(data) {#}
+{#                if(data.nick_name){#}
+{#                    _showValidateError($('#nick_name'), data.nick_name);#}
+{#                }else if(data.birthday){#}
+{#                   _showValidateError($('#birth_day'), data.birthday);#}
+{#                }else if(data.address){#}
+{#                   _showValidateError($('#address'), data.address);#}
+{#                }else if(data.status == "failure"){#}
+{#                     Dml.fun.showTipsDialog({#}
+{#                        title: '保存失败',#}
+{#                        h2: data.msg#}
+{#                    });#}
+{#                }else if(data.status == "success"){#}
+{#                    Dml.fun.showTipsDialog({#}
+{#                        title: '保存成功',#}
+{#                        h2: '个人信息修改成功！'#}
+{#                    });#}
+{#                    setTimeout(function(){window.location.href = window.location.href;},1500);#}
+{#                }#}
+{#            },#}
+{#            complete: function(XMLHttpRequest){#}
+{#                _self.val("保存");#}
+{#                _self.removeAttr("disabled");#}
+{#            }#}
+{#        });#}
+{#    });#}
+    </script>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'index.html' %}
+{% block title %}新文章{% endblock %}
+{% load staticfiles %}
+{% block content %}
+     <style>
+       .middle_wrap{
+           width: 30%;
+           margin: 0 auto;
+           text-align: center;
+           background: rgba(248, 248, 248, 0.49);
+           padding: 20px;
+       }
+       .middle_wrap input[type='text'],.middle_wrap textarea,.middle_wrap h3{
+           width: 100%;
+       }
+       .middle_wrap h3{
+           text-align: left;
+           margin: 20px 0 5px;
+       }
+       .middle_wrap input[type='text']{
+           height: 22px;
+       }
+       .middle_wrap textarea{
+           height: 200px;
+           resize: none;
+           padding-top: 5px;
+           outline: none;
+       }
+       .middle_wrap img{
+           margin: 10px -75px 0 0;
+       }
+       .img_btn{
+           float: right;
+           margin-top: 57px;
+           border: 1px solid #9f9f9f;
+           border-radius: 3px;
+           cursor: pointer;
+           padding: 5px 20px;
+       }
+       .btn_wrap{
+           margin: 10px 0;
+           text-align: right;
+       }
+       .btn_wrap .btn_cancel{
+        border: none;
+        background: none;
+        color: rgba(13, 106, 202, 0.95);
+        cursor: pointer;
+        padding: 0 20px;
+       }
+       .btn_wrap .btn_finish{
+        border: 1px solid #9f9f9f;
+        border-radius: 3px;
+        padding: 5px 20px;
+        background: none;
+        cursor: pointer;
+       }
+    </style>
+<br><br><br><br><br>
+<section class="middle_wrap">
+<form class="perinform" id="" autocomplete="off" method="post" enctype="multipart/form-data" action="{% url 'operation:operation_write' %}">
+    <div>
+        <img name="fengmiantu" id="image" src="{% static 'images/logo2.png' %}" width="224px" height="224px"/>
+        <label class="img_btn">
+            <input type="file" id="img_file" name="image" accept=".jpg,.png" hidden/>添加封面</label>
+    </div>
+    <h3>题目</h3>
+    <input type="text" id="newtitle" name="title" placeholder="请输入文章题目"/>
+    <h3>文章描述</h3>
+    <input type="text" id="newdesc" name="desc" placeholder="请输入文章描述"/>
+    <h3>正文</h3>
+    <textarea id="newdetail" name="detail" placeholder="请输入文章内容"></textarea>
+    <div class="btn_wrap">
+        <button class="btn_cancel"><a href="{% url 'index' %}">取消</a></button>
+        <button class="btn_finish" id="jsNewArticleBtn" type="submit">完成</button>
+    </div>
+        {% csrf_token %}
+                        </form>
+</section>
+    <br><br><br><br><br>
+
+
+{% endblock %}
+{% block custom_js %}
+    <script>
+     $('#img_file').change(function(){
+        loadImg();
+     })
+     function loadImg(){
+    var file = $(".img_btn").find("input")[0].files[0];
+    console.log(file)
+    var reader = new FileReader();
+    var imgFile;
+    reader.onload=function(e) {
+        imgFile = e.target.result;
+        console.log(imgFile);
+        $("#image").attr('src', imgFile);
+    };
+    reader.readAsDataURL(file);
+}
+{#     --------------------------------------------------------------------------------------------------#}
+{# $('#jsNewArticleBtn').on('click', function () {#}
+{#            var _self = $(this),#}
+{#                $jsNewArticleForm = $('#jsNewArticleForm')#}
+{#            verify = verifySubmit(#}
+{#                [#}
+{#                    {id: '#newtitle', tips: Dml.Msg.epNickName, require: true}#}
+{#                ]#}
+{#            );#}
+{#            if (!verify) {#}
+{#                return;#}
+{#            }#}
+{#            $.ajax({#}
+{#                cache: false,#}
+{#                type: 'post',#}
+{#                dataType: 'json',#}
+{#                url: "/operation/write/",#}
+{#                data: $jsEditArticleForm.serialize(),#}
+{#                async: true,#}
+{#                beforeSend: function (XMLHttpRequest) {#}
+{#                    _self.val("保存中...");#}
+{#                    _self.attr('disabled', true);#}
+{#                },#}
+{#                success: function (data) {#}
+{#                    if (data.nick_name) {#}
+{#                        _showValidateError($('#newtitle'), data.title);#}
+{#                    } else if (data.birthday) {#}
+{#                        _showValidateError($('#newdesc'), data.desc);#}
+{#                    } else if (data.address) {#}
+{#                        _showValidateError($('#newdetail'), data.detail);#}
+{#                    } else if (data.status == "failure") {#}
+{#                        Dml.fun.showTipsDialog({#}
+{#                            title: '保存失败',#}
+{#                            h2: data.msg#}
+{#                        });#}
+{#                    } else if (data.status == "success") {#}
+{#                        Dml.fun.showTipsDialog({#}
+{#                            title: '保存成功',#}
+{#                            h2: '文章修改成功！'#}
+{#                        });#}
+{#                        setTimeout(function () {#}
+{#                            window.location.href = window.location.href;#}
+{#                        }, 1500);#}
+{#                    }#}
+{#                },#}
+{#                complete: function (XMLHttpRequest) {#}
+{#                    _self.val("保存");#}
+{#                    _self.removeAttr("disabled");#}
+{#                }#}
+{#            });#}
+{#        });#}
+
+</script>
+{% endblock %}

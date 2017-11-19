@@ -1,0 +1,69 @@
+{% extends 'index.html' %}
+{% block title %}用户列表{% endblock %}
+{% block content %}
+       <section>
+           <br><br><br><br>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+		<div class="butler_list layout">
+			<div class="head">
+				<ul class="fl tab_header">
+					<li class="{% if sort == '' %}active{% endif %}"><a href="?sort=">全部</a> </li>
+					<li class="{% if sort == 'hot' %}active{% endif %}"><a href="?sort=hot">人气 &#8595;</a></li>
+				</ul>
+                <div class="fr butler-num">共<span class="key">{{ yonghu_nums }}</span>人&nbsp;&nbsp;&nbsp;</div>
+			</div>
+{% for yonghu in all_yonghu.object_list %}
+                <dl class="des">
+					<dt>
+						<a href="{% url 'yonghu:yonghu_detail' yonghu.id %}">
+                            <div class="picpic">
+                                <img width="100" height="100" class="scrollLoading" src="{{ MEDIA_URL }}{{ yonghu.image }}"/>
+                            </div>
+                        </a>
+
+					</dt>
+					<dd>
+						<a href="{% url 'yonghu:yonghu_detail' yonghu.id %}">
+                            <h1>{{ yonghu.username }}</h1>
+                        </a>
+						<ul class="cont">
+							<li>地址：<span>{{ yonghu.address }}</span></li>
+							<li>性别：<span>{{ yonghu.gender }}</span></li>
+							<li>生日：<span>{{ yonghu.birthday }}&nbsp;</span></li>
+							<li>年龄：<span>{{ yonghu.age }}</span></li>
+							<li>粉丝：<span>{{ yonghu.fans_nums }}人</span></li>
+						</ul>
+					</dd>
+                    <a class="buy buyservice" href="{% url 'yonghu:yonghu_detail' yonghu.id %}"><br/>查看<br/>详情</a>
+                </dl>
+{% endfor %}
+
+
+		</div>
+		<div class="pageturn">
+            <ul class="pagelist">
+        {% if all_yonghu.has_previous %}
+        <li class="long"><a href="?{{ all_yonghu.previous_page_number.querystring }}">上一页</a></li>
+        {% endif %}
+                {% for page in all_yonghu.pages %}
+                    {% if page %}
+                        {% ifequal page all_yonghu.number %}
+                            <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                        {% else %}
+                            <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                        {% endifequal %}
+                    {% else %}
+                        <li class="none"><a href="">...</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if all_yonghu.has_next %}
+                    <li class="long"><a href="?{{ all_yonghu.next_page_number.querystring }}">下一页</a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+	</div>
+
+</section>
+{% endblock %}

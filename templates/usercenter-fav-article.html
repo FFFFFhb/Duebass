@@ -1,0 +1,58 @@
+{% extends 'userbase.html' %}
+{% load staticfiles %}
+{% block title %}我的收藏{% endblock %}
+{% block custom_bread %}
+      <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'yonghu:yonghu_info' %}">个人中心</a>></li>
+                <li>我的收藏</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+{% block right_content %}
+  <div class="right" >
+            <div class="personal_des Releasecont">
+                <div class="head">
+                    <h1>我的收藏</h1>
+                </div>
+            </div>
+
+            <div class="personal_des permessage">
+                <div class="head">
+                    <ul class="tab_header messagehead">
+
+                        <li><a href="{% url 'yonghu:myfav_user' %}">关注用户 </a></li>
+                        <li class="active"><a href="{% url 'yonghu:myfav_atc' %}">收藏文章</a></li>
+                    </ul>
+
+                </div>
+                <div class="companycenter">
+                    <div class="group_list brief">
+{% for atc in atc_list %}
+                        <div class="module1_5 box">
+                            <a href="{% url 'article:article_detail' atc.id %}">
+                                <img width="214" height="190" src="{{ MEDIA_URL }}{{ atc.image }}"/>
+                            </a>
+                            <div class="des">
+                                <a href="{% url 'article:article_detail' atc.id %}"><h2>{{ atc.title }}</h2></a>
+                                <span class="fl">描述：<i class="key">{{ atc.desc }}</i></span>
+                                <span class="fr">收藏人数：{{ atc.fav_nums }}</span>
+                            </div>
+                            <div class="bottom">
+                                <span class="fl">取消收藏=></span>
+                                <span class="delete-group fr jsDeleteFav_course" data-favid="{{ atc.id }}"></span>
+                            </div>
+                        </div>
+{% endfor %}
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
