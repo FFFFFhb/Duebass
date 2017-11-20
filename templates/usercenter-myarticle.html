@@ -52,7 +52,7 @@
     $('.jsDeletemy_article').on('click', function(){
         var _this = $(this),
             articleid = _this.attr('data-articleid');
-        alert(articleid)
+        alert('删除成功')
         $.ajax({
                 cache: false,
                 type: "POST",

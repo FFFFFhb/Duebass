@@ -332,7 +332,8 @@ class EditArticle(LoginRequiredMixin,View):
             detail = request.POST.get('detail', '')
             edit_article = Article.objects.get(pk=edit_article_id)
             edit_article.title = title
-            edit_article.image = image
+            if image:
+                edit_article.image = image
             edit_article.desc = desc
             edit_article.detail = detail
             edit_article.save()
