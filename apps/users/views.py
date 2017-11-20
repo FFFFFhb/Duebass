@@ -287,7 +287,7 @@ class MyArticleView(LoginRequiredMixin,View):
     #我的文章
     def get(self,request):
         user_articles = Article.objects.filter(author=request.user)
-        return render(request,'usercenter-mycourse.html',{
+        return render(request, 'usercenter-myarticle.html', {
             'user_articles':user_articles
         })
 
@@ -339,9 +339,12 @@ class EditArticle(LoginRequiredMixin,View):
 
             return render(request, 'success.html')
         else:
-            return HttpResponse('{"status":"fail"}', content_type='application/json')
+            return render(request, 'failde.html')
 
 
 class SuccessView(View):
     def get(self,request):
         return render(request,'success.html')
+class FailedView(View):
+    def get(self,request):
+        return render(request,'failde.html')

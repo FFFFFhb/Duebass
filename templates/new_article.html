@@ -72,7 +72,7 @@
     <textarea id="newdetail" name="detail" placeholder="请输入文章内容"></textarea>
     <div class="btn_wrap">
         <button class="btn_cancel"><a href="{% url 'index' %}">取消</a></button>
-        <button class="btn_finish" id="jsNewArticleBtn" type="submit">完成</button>
+        <button class="btn_finish" id="jsNewArticleBtn" >完成</button>
     </div>
         {% csrf_token %}
                         </form>
@@ -99,56 +99,56 @@
     reader.readAsDataURL(file);
 }
 {#     --------------------------------------------------------------------------------------------------#}
-{# $('#jsNewArticleBtn').on('click', function () {#}
-{#            var _self = $(this),#}
-{#                $jsNewArticleForm = $('#jsNewArticleForm')#}
-{#            verify = verifySubmit(#}
-{#                [#}
-{#                    {id: '#newtitle', tips: Dml.Msg.epNickName, require: true}#}
-{#                ]#}
-{#            );#}
-{#            if (!verify) {#}
-{#                return;#}
-{#            }#}
-{#            $.ajax({#}
-{#                cache: false,#}
-{#                type: 'post',#}
-{#                dataType: 'json',#}
-{#                url: "/operation/write/",#}
-{#                data: $jsEditArticleForm.serialize(),#}
-{#                async: true,#}
-{#                beforeSend: function (XMLHttpRequest) {#}
-{#                    _self.val("保存中...");#}
-{#                    _self.attr('disabled', true);#}
-{#                },#}
-{#                success: function (data) {#}
-{#                    if (data.nick_name) {#}
-{#                        _showValidateError($('#newtitle'), data.title);#}
-{#                    } else if (data.birthday) {#}
-{#                        _showValidateError($('#newdesc'), data.desc);#}
-{#                    } else if (data.address) {#}
-{#                        _showValidateError($('#newdetail'), data.detail);#}
-{#                    } else if (data.status == "failure") {#}
-{#                        Dml.fun.showTipsDialog({#}
-{#                            title: '保存失败',#}
-{#                            h2: data.msg#}
-{#                        });#}
-{#                    } else if (data.status == "success") {#}
-{#                        Dml.fun.showTipsDialog({#}
-{#                            title: '保存成功',#}
-{#                            h2: '文章修改成功！'#}
-{#                        });#}
-{#                        setTimeout(function () {#}
-{#                            window.location.href = window.location.href;#}
-{#                        }, 1500);#}
-{#                    }#}
-{#                },#}
-{#                complete: function (XMLHttpRequest) {#}
-{#                    _self.val("保存");#}
-{#                    _self.removeAttr("disabled");#}
-{#                }#}
-{#            });#}
-{#        });#}
+ $('#jsNewArticleBtn').on('click', function () {
+            var _self = $(this),
+                $jsNewArticleForm = $('#jsNewArticleForm')
+            verify = verifySubmit(
+                [
+                    {id: '#newtitle', tips: Dml.Msg.epNickName, require: true}
+                ]
+            );
+            if (!verify) {
+                return;
+            }
+            $.ajax({
+                cache: false,
+                type: 'post',
+                dataType: 'json',
+                url: "/operation/write/",
+                data: $jsNewArticleForm.serialize(),
+                async: true,
+                beforeSend: function (XMLHttpRequest) {
+                    _self.val("保存中...");
+                    _self.attr('disabled', true);
+                },
+                success: function (data) {
+                    if (data.title) {
+                        _showValidateError($('#newtitle'), data.title);
+                    } else if (data.desc) {
+                        _showValidateError($('#newdesc'), data.desc);
+                    } else if (data.detail) {
+                        _showValidateError($('#newdetail'), data.detail);
+                    } else if (data.status == "failure") {
+                        Dml.fun.showTipsDialog({
+                            title: '保存失败',
+                            h2: data.msg
+                        });
+                    } else if (data.status == "success") {
+                        Dml.fun.showTipsDialog({
+                            title: '保存成功',
+                            h2: '文章保存成功！'
+                        });
+                        setTimeout(function () {
+                            window.location.href = window.location.href;
+                        }, 1500);
+                    }
+                },
+                complete: function (XMLHttpRequest) {
+                    _self.val("保存");
+                    _self.removeAttr("disabled");
+                }
+            });
+        });
 
 </script>
 {% endblock %}

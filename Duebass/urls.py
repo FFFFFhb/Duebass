@@ -20,7 +20,7 @@ import xadmin
 from Duebass.settings import MEDIA_ROOT
 from django.views.generic import TemplateView
 from users.views import LoginView, RegisterView,ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView,LogoutView
-from users.views import SuccessView
+from users.views import SuccessView,FailedView
 from article.views import ArticleListView
 
 urlpatterns = [
@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^yonghu/',include('users.urls',namespace='yonghu')),
     url(r'^operation/',include('operation.urls',namespace='operation')),
     url(r'^success/',SuccessView.as_view(),name='success'),
+    url(r'^failed/',FailedView.as_view(),name='failed'),
     #配置上传文件的访问处理函数
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT} )
 

@@ -26,6 +26,19 @@ class WriteArticleView(LoginRequiredMixin,View):
             new_article.detail = detail
             new_article.save()
 
-            return render(request,'success.html')
+            return render(request, 'success.html')
         else:
-            return HttpResponse('{"status":"fail"}', content_type='application/json')
+            return render(request, 'failde.html')
+
+class DeleteArticleView(LoginRequiredMixin,View):
+    def post(self,request):
+        article_id = request.POST.get('article_id',0)
+
+        if not request.user.is_authenticated():
+            return  HttpResponse('{"status":"fail", "msg":"用户未登录"}',content_type='application/json')
+        exist_records = Article.objects.filter(pk=article_id)
+        if exist_records:
+            #如果记录已经存在，则取消收藏
+            exist_records.delete()
+            return render(request, 'success.html')
+
