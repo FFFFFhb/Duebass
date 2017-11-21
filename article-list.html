@@ -1,0 +1,111 @@
+{% extends 'index.html' %}
+{% block title %}Duebass文章{% endblock %}
+{% load staticfiles %}
+{% block content %}
+<section>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+		<div class="all">共<span class="key">{{ atc_nums }}</span>篇</div>
+		<div class="butler_list company list">
+		<div class="layout">
+			<div class="head">
+				<ul class="tab_header">
+					<li class="{% if sort == '' %}active{% endif %}"><a href="?ct=&city=">全部</a> </li>
+					<li class="{% if sort == 'fav_nums' %}active{% endif %}"><a href="?sort=fav_nums">热门 &#8595;</a></li>
+					<li class="{% if sort == 'add_time' %}active{% endif %}"><a href="?sort=add_time">最新 &#8595;</a></li>
+				</ul>
+			</div>
+            {% for article in all_articles.object_list %}
+                <dl class="des difdes">
+                    <dt>
+                        <a href="{% url 'article:article_detail' article.id %}">
+                            <img width="200" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ article.image }}"/>
+                        </a>
+                    </dt>
+                    <dd>
+                        <div class="clearfix">
+                             <a href="{% url 'article:article_detail' article.id %}">
+                                 <h1>{{ article.title }}</h1>
+                             </a>
+                        </div>
+                        <ul class="cont">
+                            <li class="first"><p class="pic9">收藏数：<span>{{ article.fav_nums }}</span></p>
+                                <p class="c7">作者：<span>{{ article.author.username }}</span></p></li>
+                            <li class="c8" style="padding-left:18px;">{{ article.desc }}</li>
+                            <li class="pic10" style="padding-left:18px;">发表时间：{{ article.add_time }}
+                            </li>
+                        </ul>
+                    </dd>
+                    <div class="buy start_groupbuy jsShowPerfect2" data-id="22">
+                        <a href="{% url 'article:article_detail' article.id %}"><br/>阅读<br/>文章</a></div>
+                </dl>
+            {% endfor %}
+
+		</div>
+		 <div class="pageturn">
+            <ul class="pagelist">
+        {% if all_articles.has_previous %}
+        <li class="long"><a href="?{{ all_articles.previous_page_number.querystring }}">上一页</a></li>
+        {% endif %}
+                {% for page in all_articles.pages %}
+                    {% if page %}
+                        {% ifequal page all_articles.number %}
+                            <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                        {% else %}
+                            <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                        {% endifequal %}
+                    {% else %}
+                        <li class="none"><a href="">...</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if all_articles.has_next %}
+                    <li class="long"><a href="?{{ all_articles.next_page_number.querystring }}">下一页</a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+		</div>
+	</div>
+
+
+		<div class="right companyrank layout">
+			<div class="head">热门总榜</div>
+            {% for atc_sort in hot_atcs %}
+                <dl class="des">
+                    <dt class="num fl">{{ forloop.counter }}</dt>
+                    <dd>
+                        <a href=""><h1>{{ atc_sort.title }}</h1></a>
+                        <p>收藏数：{{ atc_sort.fav_nums }}</p>
+                    </dd>
+                </dl>
+            {% endfor %}
+
+		</div>
+        </div>
+</section>
+{% endblock %}
+
+{#<script>#}
+{#    $(function(){#}
+{#        $('#jsStayBtn').on('click', function(){#}
+{#            $.ajax({#}
+{#                cache: false,#}
+{#                type: "POST",#}
+{#                url:"/org/add_ask/",#}
+{#                data:$('#jsStayForm').serialize(),#}
+{#                async: true,#}
+{#                success: function(data) {#}
+{#                    if(data.status == 'success'){#}
+{#                        $('#jsStayForm')[0].reset();#}
+{#                        alert("提交成功")#}
+{#                    }else if(data.status == 'fail'){#}
+{#                        $('#jsCompanyTips').html(data.msg)#}
+{#                    }#}
+{#                },#}
+{#            });#}
+{#        });#}
+{#    })#}
+{##}
+{#</script>#}
+
+

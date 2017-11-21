@@ -1,0 +1,113 @@
+{% extends 'index.html' %}
+{% block title %}文章详情{% endblock %}
+{% load staticfiles %}
+{% block content %}
+    <section>
+        <br>
+        <div class="wp">
+            <div class="groupPurchase_detail detail">
+                <div class="toppro">
+                    <div class="left">
+                        <div class="picbox">
+                            <div class="tb-booth tb-pic">
+                                <img width="440" height="445" src="{{ MEDIA_URL }}{{ article.image }}" class="jqzoom"/>
+                            </div>
+                        </div>
+                        <div class="des">
+                            <h1 title="{{ article.title }}">{{ article.title }}</h1>
+                            <span class="key">{{ article.desc }}</span>
+                            <ul class="parameter">
+                                <li><span class="pram word3">点&nbsp;击&nbsp;数：</span><span>{{ article.click_num }}</span>
+                                </li>
+                                <li><span class="pram word3">收&nbsp;藏&nbsp;数：</span><span>{{ article.fav_nums }}</span>
+                                </li>
+                                <li><span class="pram word3">发表时间：</span><span title="">{{ article.add_time }}</span>
+                                </li>
+                                <li class="piclist"><span class="pram word4">作者：{{ article.author.username }}</span>
+                                </li>
+                            </ul>
+                            <div class="btns">
+                                <div class="btn colectgroupbtn"  id="jsLeftBtn">
+                                  {% if has_fav %}已收藏{% else %}收藏{% endif %}
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% block content1 %}
+        <section>
+            <div class="wp">
+                <div class="list groupPurchase_detail_pro">
+                    <div class="left layout">
+                        <div class="head">
+                            <ul class="tab_header">
+                                <li><a id="commentOn" class="active"
+                                       href="{% url 'article:article_detail' article.id %}"><span>文章详情</span></a></li>
+                                <li><a class="ui-tabs-active " id="learnOn"
+                                       href="{% url 'article:article_comment' article.id %}"><span>评论</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="tab_cont tab_cont1">
+                            <p><br/></p>
+                            <h1 class="ue_t" label="Title center" name="tc"
+                                style="border-bottom-color:#cccccc;border-bottom-width:2px;border-bottom-style:solid;padding:0px 4px 0px 0px;text-align:center;margin:0px 0px 20px;">
+                                <span style="color:#c0504d;">{{ article.title }}</span></h1>
+                            <p style="text-align:center;"><strong class="ue_t">{{ article.author }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ article.add_time }}</strong>
+                            </p>
+
+                            <p class="ue_t" style="text-indent:2em;">{{ article.detail }}</p>
+                            <p><br/></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+            <div class="clear"></div>
+            </div>
+            </div>
+            </div>
+        </section>
+    {% endblock %}
+{% endblock %}
+{% block custom_js %}
+    <script type="text/javascript">
+        //收藏分享
+        function add_fav(current_elem, fav_id, fav_type) {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "{% url 'article:add_fav' %}",
+                data: {'fav_id': fav_id, 'fav_type': fav_type},
+                async: true,
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function (data) {
+                    console.log(1)
+                    if (data.status == 'fail') {
+                        if (data.msg == '用户未登录') {
+                            window.location.href = "/login/";
+                        } else {
+                            alert(data.msg)
+                        }
+                    } else if (data.status == 'success') {
+                        current_elem.text(data.msg)
+                    }
+                },
+            });
+        }
+
+        $('#jsLeftBtn').on('click', function () {
+            add_fav($(this), {{ article.id }}, 1);
+        });
+    </script>
+{% endblock %}
+
+
+
